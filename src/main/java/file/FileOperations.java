@@ -2,6 +2,8 @@ package file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * This class is responsible for handling file operations required.
@@ -15,30 +17,47 @@ public class FileOperations {
      * @return boolean value determining the successful creation of a file.
      * @throws IOException
      */
-    public static boolean createFile(final String filePath, final String fileName) throws IOException {
-        File file = new File(filePath + "/" + fileName);
+    public File createFile(final String filePath, final String fileName) throws IOException {
+        final File file = new File(filePath + "/" + fileName);
         if(file.exists()) {
-            int lastIndex = fileName.lastIndexOf(".");
-            String fileExtension = fileName.substring(lastIndex + 1);
-            String newFileName = fileName.substring(0, lastIndex) + "(1)." + fileExtension;
-//            final String ext = fileName.split(".")[0];
-//            String newFileName = fileName.split(".")[0];
-            File newFile = new File(filePath + "/" + newFileName);
+            final int lastIndex = fileName.lastIndexOf(".");
+            final String fileExtension = fileName.substring(lastIndex + 1);
+            final String newFileName = fileName.substring(0, lastIndex) + "(1)." + fileExtension;
+            final File newFile = new File(filePath + "/" + newFileName);
             file.renameTo(newFile);
         }
-        return file.createNewFile();
+        return file;
     }
 
     /**
-     *
+     * Delete a file with a given file Name and
      * @param fileName contain the fileName to be deleted.
      * @return boolean value determining successful deletion of a file
      * @throws IOException
      */
 
-    public static boolean deleteFile(final String fileName) throws IOException {
-        File file = new File(fileName);
+    public boolean deleteFile(final String fileName) throws IOException {
+        final File file = new File(fileName);
         return file.delete();
+    }
+
+    /**
+     * Saves the content, received from server to a file.
+     * @param inputStream
+     * @param outputStream
+     * @return the number of bytes written.
+     * @throws IOException
+     */
+
+    public int saveFile(final InputStream inputStream, final OutputStream outputStream) throws IOException {
+        byte[] buffer = new byte[4096];
+        int byteRead;
+        int receivedLength = 0;
+        while((byteRead = inputStream.read(buffer)) != -1) {
+            receivedLength += byteRead;
+            outputStream.write(buffer, 0, byteRead);
+        }
+        return receivedLength;
     }
 
 }

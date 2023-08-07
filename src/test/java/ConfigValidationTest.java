@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class ConfigValidationTest {
 
-    final private ConfigValidation configValidation;
+    final ConfigValidation configValidation;
     public ConfigValidationTest() {
         configValidation = new ConfigValidation();
     }

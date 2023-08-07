@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -25,36 +26,30 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(GetFileFromServer.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.dom.*", "javax.management.*"})
 public class GetFileFromServerTest {
 
-    GetFileFromServer getFileFromServer;
+    private GetFileFromServer getFileFromServer;
 
     @Mock
-    AppConfig appConfig;
+    private AppConfig appConfig;
 
     @Mock
-    URL url;
+    private URL url;
 
     @Mock
-    HttpURLConnection httpURLConnectionMock;
+    private HttpURLConnection httpURLConnectionMock;
 
     @Mock
-    File file;
+    private File file;
 
     public GetFileFromServerTest() throws IOException {
-
         MockitoAnnotations.openMocks(this);
-        appConfig = Mockito.mock(AppConfig.class);
-        file = Mockito.mock(File.class);
-        httpURLConnectionMock = Mockito.mock(HttpURLConnection.class);
-        url = Mockito.mock(URL.class);
         getFileFromServer = new GetFileFromServer(appConfig);
-
     }
 
     @Test
     public void invalidPathFromConfig() {
-
         Mockito.when(appConfig.getFilePath()).thenReturn("src/package/");
         Mockito.when(appConfig.getFileName()).thenReturn("testFile.txt");
         Mockito.when(appConfig.getServerUrl()).thenReturn("http://localhost.com:8080/download");
@@ -63,7 +58,6 @@ public class GetFileFromServerTest {
 
     @Test
     public void invalidUrlFromConfig() throws IOException {
-
         Path myTempDir = Files.createTempDirectory("myTemp");
         File tempDir = new File(myTempDir.toString());
         Mockito.when(appConfig.getFilePath()).thenReturn(myTempDir.toString());
@@ -75,7 +69,6 @@ public class GetFileFromServerTest {
 
     @Test
     public void invalidFileNameFromConfig() throws IOException {
-
         Path myTempDir = Files.createTempDirectory("myTemp");
         File tempDir = new File(myTempDir.toString());
         Mockito.when(appConfig.getFilePath()).thenReturn(myTempDir.toString());
@@ -87,7 +80,6 @@ public class GetFileFromServerTest {
 
     @Test
     public void downloadSuccess() throws Exception {
-
         Path myTempDir = Files.createTempDirectory("myTemp");
         File tempDir = new File(myTempDir.toString());
         Mockito.when(appConfig.getFilePath()).thenReturn(myTempDir.toString());
@@ -104,12 +96,10 @@ public class GetFileFromServerTest {
         verify(url).openConnection();
         verify(httpURLConnectionMock).getInputStream();
         tempDir.deleteOnExit();
-
     }
 
     @Test
     public void downloadFailure_ContentLength() throws Exception {
-
         Path myTempDir = Files.createTempDirectory("myTemp");
         File tempDir = new File(myTempDir.toString());
         Mockito.when(appConfig.getFilePath()).thenReturn(myTempDir.toString());
@@ -127,7 +117,6 @@ public class GetFileFromServerTest {
 
     @Test
     public void downloadFailure_FileAlreadyExists() throws Exception {
-
         Path myTempDir = Files.createTempDirectory("myTemp");
         File tempDir = new File(myTempDir.toString());
         File filePath = new File(myTempDir.toString() + "/" + "testFile.txt");
@@ -145,7 +134,6 @@ public class GetFileFromServerTest {
 
     @Test
     public void downloadFailure_FileNotExistOnServer() throws Exception {
-
         Path myTempDir = Files.createTempDirectory("myTemp");
         File tempDir = new File(myTempDir.toString());
         Mockito.when(appConfig.getFilePath()).thenReturn(myTempDir.toString());
