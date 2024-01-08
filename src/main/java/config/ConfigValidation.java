@@ -1,5 +1,6 @@
 package config;
 
+import alert.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +18,10 @@ public class ConfigValidation {
 
     private static final Logger log = LogManager.getLogger(ConfigValidation.class); // remove as not being used
     private static final String URL_REGEX = "((https|http)\\:\\/\\/)([\\w\\d-]+\\.)*[\\w-]+[\\.\\:]\\w+([\\/\\?\\=\\&\\#\\.]?[\\w-]+)*\\/?";
-    private static final String FILE_NAME_REGEX = "([a-zA-Z0-9\\s_\\-\\(\\)])+[.]([a-zA-Z0-9])+$";
+    private static final String FILE_NAME_REGEX = "([a-zA-Z0-9\\s_\\-\\(\\)])+[.]([a-zA-Z0-9-_])+$";
     private static final Pattern patternUrlRegex = Pattern.compile(URL_REGEX);
     private static final Pattern patternFileNameRegex = Pattern.compile(FILE_NAME_REGEX);
-
+    private static final Alert alert = new Alert();
     /**
      * Validate the server Url from the config.
      * @param serverUrl: URL of the server where the requests hit.
@@ -60,7 +61,7 @@ public class ConfigValidation {
      * @param filePath: File path where the file is located.
      * @param fileName: Name of the file.
      */
-    public static void validator(final String serverUrl, final String filePath, final String fileName) { // better to have a single function and call it thrice
+    public static void validator(final String serverUrl, final String filePath, final String fileName, final String alertUrl) { // better to have a single function and call it thrice
 
         if(!validateServerUrl(serverUrl)) {
 //            log.error("Server url is invalid");
@@ -68,16 +69,18 @@ public class ConfigValidation {
         }
 
         if(!validateFilePath(filePath)) {
-//            log.error("File path is invalid");
-            throw new RuntimeException("File path is invalid"); //same as above
+            log.error("File path to save the file is invalid");
+            alert.raiseAnAlert("alert1703", "", "", 0, alertUrl);
+            System.exit(1);
+//            throw new RuntimeException("File path is invalid"); //same as above
         }
-        if(!validateFileName(fileName)) {
-//            log.error("File Name does not follow the naming convention." +
+//        if(!validateFileName(fileName)) {
+////            log.error("File Name does not follow the naming convention." +
+////                    "Allowed is lowercase characters (a-z), uppercase character(A-Z), brackets (), underscore _" +
+////                    "followed by . and then the extension");
+//            throw new RuntimeException("File Name does not follow the naming convention." +
 //                    "Allowed is lowercase characters (a-z), uppercase character(A-Z), brackets (), underscore _" +
-//                    "followed by . and then the extension");
-            throw new RuntimeException("File Name does not follow the naming convention." +
-                    "Allowed is lowercase characters (a-z), uppercase character(A-Z), brackets (), underscore _" +
-                    "followed by . and then the extension"); //same as above
-        }
+//                    "followed by . and then the extension"); //same as above
+//        }
     }
 }

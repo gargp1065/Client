@@ -45,6 +45,10 @@ public class AppConfig {
             throw new IOException("Missing configuration: file.name");
         }
 
+        if (!properties.containsKey("alert.url")) {
+            throw new IOException("Missing configuration: alert.url");
+        }
+
     }
 
     public String getFilePath() {
@@ -57,6 +61,11 @@ public class AppConfig {
 
     public String getServerUrl() {
         return properties.getProperty("server.url");
+    }
+
+
+    public String getAlertUrl() {
+        return properties.getProperty("alert.url");
     }
 
 }

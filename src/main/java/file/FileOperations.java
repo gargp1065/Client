@@ -1,5 +1,9 @@
 package file;
 
+import client.GetFileFromServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +14,7 @@ import java.io.OutputStream;
  */
 public class FileOperations {
 
+    private static final Logger log = LogManager.getLogger(FileOperations.class);
     /**
      * This method checks and creates a new file with fileName in filePath directory
      * @param filePath contains the directory path
@@ -18,6 +23,7 @@ public class FileOperations {
      * @throws IOException
      */
     public File createFile(final String filePath, final String fileName) throws IOException {
+        log.info("Creating a file.");
         final File file = new File(filePath + "/" + fileName);
         if(file.exists()) {
             final int lastIndex = fileName.lastIndexOf(".");

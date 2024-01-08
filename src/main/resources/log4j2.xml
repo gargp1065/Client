@@ -14,5 +14,12 @@
         <Root level="info" additivity="false">
             <AppenderRef ref="console" />
         </Root>
+
+        <!-- Exclude the specific warning log message -->
+        <Logger name="sun.reflect.Reflection" level="WARN" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
     </Loggers>
+
+
 </Configuration>
