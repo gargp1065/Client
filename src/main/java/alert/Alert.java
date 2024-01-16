@@ -83,11 +83,13 @@ public class Alert {
 
             // Close the connection
             connection.disconnect();
+            System.exit(1);
         } catch (Exception e) {
             logger.error("Error while sending Alert Error: {} for alert: {}",
                     e.getMessage(),
                     alertId,
                     e);
+            System.exit(1);
         }
     }
 
