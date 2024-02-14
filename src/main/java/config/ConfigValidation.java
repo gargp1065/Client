@@ -1,12 +1,15 @@
 package config;
 
 import alert.Alert;
+import audit.AuditManagement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -22,6 +25,8 @@ public class ConfigValidation {
     private static final Pattern patternUrlRegex = Pattern.compile(URL_REGEX);
     private static final Pattern patternFileNameRegex = Pattern.compile(FILE_NAME_REGEX);
     private static final Alert alert = new Alert();
+
+
     /**
      * Validate the server Url from the config.
      * @param serverUrl: URL of the server where the requests hit.
@@ -61,7 +66,8 @@ public class ConfigValidation {
      * @param filePath: File path where the file is located.
      * @param fileName: Name of the file.
      */
-    public static void validator(final String serverUrl, final String filePath, final String fileName, final String alertUrl) { // better to have a single function and call it thrice
+    public static void validator(final String serverUrl, final String filePath, final String fileName,
+                                 final String alertUrl, final Connection connection, final AuditManagement auditManagement, long executionStartTime) throws ClassNotFoundException { // better to have a single function and call it thrice
 
         if(!validateServerUrl(serverUrl)) {
 //            log.error("Server url is invalid");
@@ -70,7 +76,14 @@ public class ConfigValidation {
 
         if(!validateFilePath(filePath)) {
             log.error("File path to save the file is invalid");
+            Date finishDate = new Date();
+            long executionFinishTime = finishDate.getTime();
+            log.info("First Execution Finish Time for deletion " + executionFinishTime);
+            log.info("Subtract Execution Finish Time deletion " + Math.subtractExact(executionFinishTime, executionStartTime));
+            long executionFinalTime = executionFinishTime - executionStartTime;
+            log.info("Execution Finish Time for deletion " + executionFinalTime);
             alert.raiseAnAlert("alert1703", "", "", 0, alertUrl);
+            auditManagement.updateAudit(501, "FAIL", "File path to save is invalid.",  executionFinalTime, connection);
             System.exit(1);
 //            throw new RuntimeException("File path is invalid"); //same as above
         }

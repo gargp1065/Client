@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>eir-client-file-download</artifactId>
-    <version>0.1.2</version>
+    <version>1</version>
     <dependencies>
 
             <dependency>
@@ -71,6 +71,11 @@
             <version>2.20.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 <!--        <dependency>-->

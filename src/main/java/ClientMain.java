@@ -36,7 +36,7 @@ public class ClientMain {
             GetFileFromServer getFileFromServer = new GetFileFromServer(appConfig);
             getFileFromServer.downloadFile();
         }
-        catch (IOException exception) {
+        catch (Exception exception) {
             exception.printStackTrace();
         }
     }

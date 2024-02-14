@@ -49,6 +49,10 @@ public class AppConfig {
             throw new IOException("Missing configuration: alert.url");
         }
 
+        if (!properties.containsKey("decryptor.path")) {
+            throw new IOException("Missing configuration: decryptor.path");
+        }
+
     }
 
     public String getFilePath() {
@@ -68,4 +72,6 @@ public class AppConfig {
         return properties.getProperty("alert.url");
     }
 
+    public String getDecryptorPath() { return properties.getProperty("decryptor.path");
+    }
 }
