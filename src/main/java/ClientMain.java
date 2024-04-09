@@ -21,11 +21,7 @@ public class ClientMain {
      * @throws IOException
      */
     public static void main(String args[]) throws IOException {
-//        BasicConfigurator.configure();
-        Configurator.initialize(null, "src/main/resources/log4j2.xml");
-//        Configurator.defaultConfig()
-//                .formatPattern("%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n")
-//                .configure();
+
         if(args.length == 0) {
 //            log.error("Configuration File Path is not provided.");
             throw new RuntimeException("Configuration File Path is not provided.");
